@@ -1,1 +1,124 @@
-
+#ContactBook
+#parent class
+class Contact:
+    def __init__(self,name,phno):
+        self.__name=name
+        self.__phno=phno
+    def get_name(self):
+        return self.__name
+    def get_phno(self):
+        return self.__phno
+    def set_phno(self,phno):
+        self.__phno=phno
+    def display(self):
+        print("Name:",self.__name)
+        print("Phno:",self.__phno)
+#Child Class
+class PersonalContacts(Contact):
+    def __init__(self,name,phno,birthday): 
+        super().__init__(name,phno) 
+        self.birthday=birthday
+    def display(self):
+        print("\n---Personal Contact---")
+        print("Name:",self.get_name())
+        print("Phone:",self.get_phno())
+        print("Birthday:",self.birthday)
+class WorkContact(Contact):  
+    def __init__(self,name,phno,company): 
+        super().__init__(name,phno) 
+        self.company=company
+    # Method overriding 
+    def display(self): 
+        print("\n--- Work Contact ---") 
+        print("Name:",self.get_name()) 
+        print("Phone:",self.get_phno()) 
+        print("Company:",self.company)
+#ContactBook Class
+class ContactBook:
+    def __init__(self):
+        self.contacts=[]
+    #Add contact
+    def add_contact(self):
+        print("\n1.Personal Contact")
+        print("\n2.Work Contact")
+        choice=int(input("Enter choice:"))
+        name=input("Enter name:")
+        phno=input("Enter the phone number:")
+        if choice==1:
+            birthday=input("Enter birthday:")
+            contact=PersonalContacts(name,phno,birthday)
+        elif choice==2: 
+            company=input("Enter company name: ") 
+            contact=WorkContact(name,phno,company)
+        else:
+            print("Invalid choice")
+            return
+        self.contacts.append(contact) 
+        print("Contact added successfully!")
+    #Display contacts
+    def show_contacts(self):
+        if len(self.contacts)==0:
+            print("No contacts available")
+            return
+        print("\n===Contact Book===")
+        for contact in self.contacts:
+            contact.display()
+    #Search Contact
+    def search_contact(self):
+        name=input("Enter name to search:")
+        for contact in self.contacts:
+            if contact.get_name().lower()==name.lower():
+                print("\nContact Found!")
+                contact.display()
+                return
+        print("Contact not found")
+    # Edit contact
+    def edit_contact(self):
+        name=input("Enter name to edit: ")
+        for contact in self.contacts:
+            if contact.get_name().lower()==name.lower():
+                print("Contact found!")
+                contact.set_phno(input("Enter new phone number:"))
+                if isinstance(contact,PersonalContacts):
+                    contact.birthday=input("Enter new birthday:")
+                else:
+                    contact.company=input("Enter new company:")
+                print("Contact updated successfully!")
+                return
+        print("Contact not found.") 
+    #Delete Contact
+    def delete_contact(self):
+        name=input("Enter name to delete:")
+        for contact in self.contacts:
+            if contact.get_name().lower()==name.lower():
+                self.contacts.remove(contact)
+                print("Contact deleted successfully!")
+                return
+        print("Contact not found.")
+def main():
+    book=ContactBook()
+    while True:
+        print("\n===== CONTACT BOOK =====")
+        print("1.Add Contact")
+        print("2.Show Contacts")
+        print("3.Search Contact")
+        print("4.Edit Contact")
+        print("5.Delete Contact")
+        print("6.Exit")
+        choice=int(input("Enter your choice: "))
+        if choice == 1:
+            book.add_contact()
+        elif choice == 2:
+            book.show_contacts()
+        elif choice == 3:
+            book.search_contact()
+        elif choice == 4:
+            book.edit_contact()
+        elif choice == 5:
+            book.delete_contact()
+        elif choice == 6:
+            print("Thank You!")
+            break
+        else:
+            print("Invalid choice")
+main()
